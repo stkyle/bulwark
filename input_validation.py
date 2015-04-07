@@ -4,32 +4,37 @@ Created on Sun Apr  5 15:22:58 2015
 
 @author: steve
 """
-#REGEX_URL = '^((((https?|ftps?|gopher|telnet|nntp)://)|(mailto:|news:))(%[0-9A-Fa-f]{2}|[-()_.!~*';/?:@&=+$,A-Za-z0-9])+)([).!';/?:,][[:blank:]])?$]'
 import re
 import csv
-# Match
+
+# Match Regex
+#REGEX_URL = '^((((https?|ftps?|gopher|telnet|nntp)://)|(mailto:|news:))(%[0-9A-Fa-f]{2}|[-()_.!~*';/?:@&=+$,A-Za-z0-9])+)([).!';/?:,][[:blank:]])?$]'
 REGEX_EMAIL = r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"
 REGEX_IP4 = r'^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'
 REGEX_IP6 = r'^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$'
 REGEX_URL = r'^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$'
 REGEX_ZIPCODE = r'^\d{5}(-\d{4})?$'
 REGEX_RTN = r'^((0[0-9])|(1[0-2])|(2[1-9])|(3[0-2])|(6[1-9])|(7[0-2])|80)([0-9]{7})$'
-# Parse
+
+# Parse Regex
 REGEX_URI = r'^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?'
+
 
 def regex_validate(pattern, input_str):
     return bool(re.match(pattern, input_str))
-    
+
+
 def is_prefixed(input_str, prefix_str):
     return input_str[:len(prefix_str)].lower() == prefix_str
-
 
 
 def is_email(input_str):
     return regex_validate(REGEX_EMAIL, input_str)
     
+    
 def is_ip4(input_str):
     return regex_validate(REGEX_IP4, input_str)
+
 
 def is_ip6(input_str):
     return regex_validate(REGEX_IP6, input_str)
@@ -49,6 +54,7 @@ def get_permanent_uri_schemes():
         for row in scheme_reader:
             valid_schemes[row[0]] = '%s %s' % (row[2], row[3])
     return valid_schemes
+
 
 def get_provisional_uri_schemes():
     """
@@ -78,7 +84,6 @@ def is_hostname(hostname):
     return all(allowed.match(x) for x in hostname.split("."))
     
 
-
 def is_uri(input_str):
     """
     https://tools.ietf.org/html/rfc3986
@@ -107,7 +112,6 @@ def is_urn(input_str):
     return is_prefixed(input_str, 'urn:')
 
 
-
 def is_url(input_str, *args, **kwargs):
     """
     """
@@ -117,7 +121,6 @@ def is_url(input_str, *args, **kwargs):
 def is_zipcode(input_str):
     """ US Zip Code """
     return regex_validate(REGEX_ZIPCODE, input_str)
-    
     
     
 def is_ABANumber(input_str):
@@ -141,7 +144,6 @@ def is_CUSIP(input_str, *args, **kwargs):
     raise NotImplementedError
     
     
-    
 def is_EAN13(input_str, *args, **kwargs):
     """EAN-13, UPC, ISBN-13 check digit calculation.
     """
@@ -160,6 +162,7 @@ def is_ISBN10(input_str, *args, **kwargs):
     SBN-10 check digit calculation.
     """
     raise NotImplementedError
+    
     
 def is_ISIN(input_str, *args, **kwargs):
     """
@@ -188,7 +191,102 @@ def is_Verhoeff(input_str, *args, **kwargs):
     """
     raise NotImplementedError
     
-    
+
+
+def is_url2(input_val):
+  	"""A valid URL per the URL spec."""
+  	REGEX_url2 = r"^((((https?|ftps?|gopher|telnet|nntp)://)|(mailto:|news:))(%[0-9A-Fa-f]{2}|[-()_.!~*';/?:@&=+$,A-Za-z0-9])+)([).!';/?:,][[:blank:]])?$"
+
+
+
+def is_ip2(input_val):
+  	"""A valid IP Address"""
+  	REGEX_IP = r"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
+
+
+
+def is_email2(input_val):
+  	"""A valid e-mail address"""
+  	REGEX_email = r"^[a-zA-Z0-9+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$"
+
+
+
+def is_safetext(input_val):
+  	"""Lower and upper case letters and all digits"""
+  	REGEX_safetext = r"^[a-zA-Z0-9 .-]+$"
+
+
+
+def is_date(input_val):
+  	"""Date in US format with support for leap years"""
+  	REGEX_date = r"^(?:(?:(?:0?[13578]|1[02])(\/|-|\.)31)\1|(?:(?:0?[1,3-9]|1[0-2])(\/|-|\.)(?:29|30)\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:0?2(\/|-|\.)29\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:(?:0?[1-9])|(?:1[0-2]))(\/|-|\.)(?:0?[1-9]|1\d|2[0-8])\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$"
+
+
+
+def is_creditcard(input_val):
+  	"""A valid credit card number"""
+  	REGEX_creditcard = r"^((4\d{3})|(5[1-5]\d{2})|(6011)|(7\d{3}))-?\d{4}-?\d{4}-?\d{4}|3[4,7]\d{13}$"
+
+
+
+def is_password(input_val):
+  	"""4 to 8 character password requiring numbers and both lowercase and uppercase letters"""
+  	REGEX_password = r"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$"
+
+
+
+def is_complexpassword(input_val):
+  	"""4 to 32 character password requiring at least 3 out 4 (uppercase and lowercase letters, numbers and special characters) and no more than 2 equal characters in a row"""
+  	REGEX_complexpassword = r"^(?:(?=.*\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))(?!.*(.)\1{2,})[A-Za-z0-9!~<>,;:_=?*+#."&§%°()\|\[\]\-\$\^\@\/]{8,32}$"
+
+
+
+def is_digitword(input_val):
+  	"""The English words representing the digits 0 to 9"""
+  	REGEX_English_digitwords = r"^(zero|one|two|three|four|five|six|seven|eight|nine)$"
+
+
+
+def is_dayword(input_val):
+  	"""English 2 character abbreviations for the days of the week"""
+  	REGEX_English_daywords = r"^(Mo|Tu|We|Th|Fr|Sa|Su)$"
+
+ 
+
+def is_monthword(input_val):
+  	"""English 3 character abbreviations for the months"""
+  	REGEX_English_monthwords = r"^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)$"
+
+
+
+
+def is_us_zipcode(input_val):
+  	"""US zip code with optional dash-four"""
+  	REGEX_US_zip = r"^\d{5}(-\d{4})?$"
+
+
+
+def is_us_phone(input_val):
+	"""US phone number with or without dashes"""
+  	REGEX_US_phone = r"^\D?(\d{3})\D?\D?(\d{3})\D?(\d{4})$"
+
+
+
+def is_us_state_abbr(input_val):
+  	"""2 letter U.S. state abbreviations"""
+  	REGEX_US_state = r"^(AE|AL|AK|AP|AS|AZ|AR|CA|CO|CT|DE|DC|FM|FL|GA|GU|HI|ID|IL|IN|IA|KS|KY|LA|ME|MH|MD|MA|MI|MN|MS|MO|MP|MT|NE|NV|NH|NJ|NM|NY|NC|ND|OH|OK|OR|PW|PA|PR|RI|SC|SD|TN|TX|UT|VT|VI|VA|WA|WV|WI|WY)$"
+
+
+
+
+def is_us_ssn(input_val):
+  	"""9 digit U.S. social security number with dashes"""
+	REGEX_US_ssn = r"^\d{3}-\d{2}-\d{4}$"
+
+
+
+
+
 def check_type(input_obj, obj_type):
     """Data Type Check
 
