@@ -1,0 +1,8 @@
+apt-get install make python-dev python-virtualenv \
+    mercurial unzip
+
+# Up TCP connection limits
+sysctl net.core.somaxconn=2048
+sysctl net.ipv4.tcp_max_syn_backlog=2048
+
+# Check OpenSSL
